@@ -5,6 +5,7 @@ import {
     Switch,
     Link,
 } from "react-router-dom";
+import './App.css'
 import Home from './Home.js'
 import Login from './Login.js'
 import SignUp from './SignUp.js'
