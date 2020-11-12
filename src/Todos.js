@@ -5,18 +5,27 @@ export default class Todos extends Component {
     state = {
         todos: [],
         todoName: '',
+        loading: false,
     }
 
-    componentDidMount = async () => {
+    fetchTodos = async () => {
+        await this.setState({ loading: true })
         const response = await request.get('https://young-sierra-73878.herokuapp.com/api/todos')
         .set('Authorization', this.props.token)
 
-        this.setState({ todos:response.body })
+        this.setState({ todos: response.body })
+        await this.setState({ loading: false })
+
+    }
+
+    componentDidMount = async () => {
+        await this.fetchTodos();
     }
 
     handleSubmit = async (e) => {
         e.preventDefault();
 
+        await this.setState({ loading: true })
         await request.post('https://young-sierra-73878.herokuapp.com/api/todos')
         .send({
             name: this.state.todoName,
@@ -24,10 +33,14 @@ export default class Todos extends Component {
         })
         .set('Authorization', this.props.token)
 
-        const response = request.get('https://young-sierra-73878.herokuapp.com/api/todos')
+        await this.fetchTodos();
+    }
+
+    handleCompleted = async (someId) => {
+        await request.put(`https://young-sierra-73878.herokuapp.com/api/todos/${someId}`)
         .set('Authorization', this.props.token)
 
-        this.setState({ todos: response.body })
+        await this.fetchTodos();
     }
 
     render() {
@@ -44,9 +57,14 @@ export default class Todos extends Component {
                     </label>
                 </form>
                 {
-                    !!this.state.todos.length && this.state.todos.map(todo => <div key={todo.id}>
-                        name: {todo.name}; 
-                        completed: {todo.completed}
+                    this.state.loading 
+                        ? 'LOADING'
+                        : this.state.todos.map(todo => <div key={todo.id}>
+                        Task Name: {todo.name}<br/>
+                        {todo.completed}
+                        {
+                            todo.completed ? 'You did it!' : <button onClick={() => this.handleCompleted(todo.id)}>Task Finished</button>
+                        }
                         </div>)
                 }
             </div>
