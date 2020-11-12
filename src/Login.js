@@ -15,7 +15,7 @@ export default class Login extends Component {
 
         //TODO make and new account, then take user to home page with their new token
         const user = await request
-        .post('https://young-sierra-73878.herokuapp.com/auth/login')
+        .post('https://young-sierra-73878.herokuapp.com/auth/signin')
         .send(this.state)
 
         console.log(user.body)

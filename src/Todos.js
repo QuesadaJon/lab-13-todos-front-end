@@ -59,7 +59,7 @@ export default class Todos extends Component {
                 {
                     this.state.loading 
                         ? 'LOADING'
-                        : this.state.todos.map(todo => <div key={todo.id}>
+                        : this.state.todos.map(todo => <div key={`${todo.name}${todo.id}`}>
                         Task Name: {todo.name}<br/>
                         {todo.completed}
                         {
