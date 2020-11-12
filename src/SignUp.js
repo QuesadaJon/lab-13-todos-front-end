@@ -20,6 +20,9 @@ export default class SignUp extends Component {
 
         console.log(user.body)
         this.setState({ loading:false })
+
+        this.props.usernameTokenCallback(user.body.email, user.body.token)
+        this.props.history.push('/todos')
     }
     render() {
         return (
